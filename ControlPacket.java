@@ -16,7 +16,7 @@ public class ControlPacket {
     /**
      * Returns the byte-data
      */
-    public byte[] getData() {
+    public byte[] getPacketBytes() {
         return this.data;
     }
 
@@ -32,14 +32,24 @@ public class ControlPacket {
         return java.nio.ByteBuffer.wrap(getSourceArray()).getInt();
     }
 
+    //Returns source address
     public Integer getDestination() {
         return java.nio.ByteBuffer.wrap(getDestinationArray()).getInt();
     }
 
+    public String getKey() {
+        return new String(getContentLengthArray());
+    }
+
+    //Returns content-length
     public Integer getContentLength(){
         return java.nio.ByteBuffer.wrap(getContentLengthArray()).getInt();
     }
 
+    //Returns payload content
+    public Byte[] getPayload() {
+        return Arrays.copyOfRange(data, 44, getKeyArray());
+    }
     
     /**------|Private methods|------**/
 
@@ -58,9 +68,14 @@ public class ControlPacket {
         return Arrays.copyOfRange(data, 4, 7);
     }
     
+    /** Returns byte[] with destination address **/
+    private byte[] getKeyArray(){
+        return Arrays.copyOfRange(data, 12, 43);
+    }
+    
     /** Returns byte[] with contetlength **/
     private byte[] getContentLengthArray(){
-        return Arrays.copyOfRange(data, 10, 12);
+        return Arrays.copyOfRange(data, 10, 11);
     }
 
 
