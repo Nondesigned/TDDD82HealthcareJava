@@ -3,9 +3,9 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * BufferUtils
+ * ServerUtils
  */
-public class BufferUtils{
+public class ServerUtils{
     public static byte[] inputStreamToByte(InputStream stream) throws IOException {
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
         int nRead;
@@ -18,4 +18,11 @@ public class BufferUtils{
         return buffer.toByteArray();
     }
 
+    /**
+     * Return the i:th bit from byte
+     */
+    public byte getBit(byte input, int position)
+    {
+        return (input >> position) & 1;
+    }
 }
