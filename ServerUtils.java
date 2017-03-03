@@ -38,10 +38,8 @@ public class ServerUtils{
      * Sets range of array
      */
     public static byte[] setRange(byte[] source, byte[] destination, int start){
-        System.out.println("From: "+start+","+source.length);
-        for(int i=start; i < source.length; i++){            
+        for(int i=start; i < start+source.length; i++)            
             destination[i]=source[i-start];
-        }
             
         return destination;
     }

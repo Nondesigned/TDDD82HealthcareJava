@@ -39,7 +39,7 @@ public class ControlPacket {
     }
 
     public String getKey() {
-        return new String(getContentLengthArray());
+        return new String(Arrays.copyOfRange(data, 12, 44));
     }
 
     //Returns content-length
@@ -78,7 +78,7 @@ public class ControlPacket {
     //Sets payload content and sets the Content-length
     public void setPayload(byte[] content) {
         data = ServerUtils.setRange(content, data, 44);
-        data = ServerUtils.setRange(content.length, data,10);
+        data = ServerUtils.setRange(ByteBuffer.allocate(2).putInt(content.length).array(), data, 10);
     }
 
     /**------|Private methods|------**/
