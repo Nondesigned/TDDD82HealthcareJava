@@ -39,23 +39,24 @@ public class ControlPacket {
     }
 
     public String getKey() {
-        return new String(Arrays.copyOfRange(data, 12, 44));
+        //Replace removes empty characters
+        return new String(Arrays.copyOfRange(data, 12, 44)).replaceAll("\u0000.*", "");
     }
 
     //Returns content-length
     public Integer getContentLength(){
-        return java.nio.ByteBuffer.wrap(getContentLengthArray()).getInt();
+        return (int)java.nio.ByteBuffer.wrap(getContentLengthArray()).getShort();
     }
 
     //Returns payload content
     public byte[] getPayload() {
-        return Arrays.copyOfRange(data, 44, getContentLength());
+        return Arrays.copyOfRange(data, 44, 44+getContentLength());
     }
     //Setters
     /**
      * Sets the value of flag i
      */
-    public void setFlag(Flags flags) {
+    public void setFlag(CommFlags flags) {
         data = ServerUtils.setRange(flags.getBytes(), data, 8);
     }
 
@@ -78,7 +79,7 @@ public class ControlPacket {
     //Sets payload content and sets the Content-length
     public void setPayload(byte[] content) {
         data = ServerUtils.setRange(content, data, 44);
-        data = ServerUtils.setRange(ByteBuffer.allocate(2).putInt(content.length).array(), data, 10);
+        data = ServerUtils.setRange(ByteBuffer.allocate(2).putShort((short)content.length).array(), data, 10);
     }
 
     /**------|Private methods|------**/

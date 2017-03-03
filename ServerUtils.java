@@ -24,6 +24,13 @@ public class ServerUtils{
     public static Integer getBit(byte input, int position){
         return ((input >> position) & 1);
     }
+    
+    /**
+     * Sets the i:th bit in a byte to specified value
+     */
+    public static byte setBit(byte input, int position, boolean val){
+            return val==true?(byte) (input | (1 << position)):(byte) (input | (1 << position));
+    }
 
     /**
      * Sets range of array
