@@ -78,7 +78,7 @@ public class ControlPacket {
     //Sets payload content and sets the Content-length
     public void setPayload(byte[] content) {
         data = ServerUtils.setRange(content, data, 44);
-        data = ServerUtils.setRange(content.length, data,)10);
+        data = ServerUtils.setRange(content.length, data,10);
     }
 
     /**------|Private methods|------**/
