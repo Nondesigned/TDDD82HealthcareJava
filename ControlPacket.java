@@ -1,3 +1,4 @@
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 /**
@@ -47,37 +48,65 @@ public class ControlPacket {
     }
 
     //Returns payload content
-    public Byte[] getPayload() {
-        return Arrays.copyOfRange(data, 44, getKeyArray());
+    public byte[] getPayload() {
+        return Arrays.copyOfRange(data, 44, getContentLength());
     }
-    
+    //Setters
+    /**
+     * Sets the value of flag i
+     */
+    public void setFlag(Flags flags) {
+        data = ServerUtils.setRange(flags.getBytes(), data, 8);
+    }
+
+    //Sets source address
+    public void setSource(int source) {
+        byte[] bytes = ByteBuffer.allocate(4).putInt(source).array();
+        data = ServerUtils.setRange(bytes,data , 0);
+    }
+
+    //Sets destination address
+    public void setDestination(int destination) {
+        byte[] bytes = ByteBuffer.allocate(4).putInt(destination).array();
+        data = ServerUtils.setRange(bytes, data, 4);
+    }
+
+    public void setKey(String key) {
+        data = ServerUtils.setRange(key.getBytes(), data ,12);
+    }
+
+    //Sets payload content and sets the Content-length
+    public void setPayload(byte[] content) {
+        data = ServerUtils.setRange(content, data, 44);
+        data = ServerUtils.setRange(content.length, data,)10);
+    }
+
     /**------|Private methods|------**/
 
     /** Returns byte[] with flags **/
     private byte[] getFlagArray(){
-        return Arrays.copyOfRange(data, 8, 9);
+        return Arrays.copyOfRange(data, 8, 10);
     }
 
     /** Returns byte[] with source address **/
     private byte[] getSourceArray(){
-        return Arrays.copyOfRange(data, 0, 3);
+        return Arrays.copyOfRange(data, 0, 4);
     }
 
     /** Returns byte[] with destination address **/
     private byte[] getDestinationArray(){
-        return Arrays.copyOfRange(data, 4, 7);
+        return Arrays.copyOfRange(data, 4, 8);
     }
     
     /** Returns byte[] with destination address **/
     private byte[] getKeyArray(){
-        return Arrays.copyOfRange(data, 12, 43);
+        return Arrays.copyOfRange(data, 12, 44);
     }
     
     /** Returns byte[] with contetlength **/
     private byte[] getContentLengthArray(){
-        return Arrays.copyOfRange(data, 10, 11);
+        return Arrays.copyOfRange(data, 10, 12);
     }
-
 
 
 }

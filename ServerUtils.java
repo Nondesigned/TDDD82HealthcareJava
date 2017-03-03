@@ -21,8 +21,28 @@ public class ServerUtils{
     /**
      * Return the i:th bit from byte
      */
-    public byte getBit(byte input, int position)
-    {
-        return (input >> position) & 1;
+    public static Integer getBit(byte input, int position){
+        return ((input >> position) & 1);
+    }
+
+    /**
+     * Sets range of array
+     */
+    public static byte[] setRange(byte[] source, byte[] destination, int start, int end ){
+        for(int i=start; i <= end; i++)
+            destination[i]=source[i-start];
+        return destination;
+    }
+
+    /**
+     * Sets range of array
+     */
+    public static byte[] setRange(byte[] source, byte[] destination, int start){
+        System.out.println("From: "+start+","+source.length);
+        for(int i=start; i < source.length; i++){            
+            destination[i]=source[i-start];
+        }
+            
+        return destination;
     }
 }
