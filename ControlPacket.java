@@ -27,6 +27,7 @@ public class ControlPacket {
         return ServerUtils.getBit(getFlagArray()[(int)(i/8)], i) != 0;
     }
 
+    //Returns source address
     public Integer getSource() {
         return java.nio.ByteBuffer.wrap(getSourceArray()).getInt();
     }
