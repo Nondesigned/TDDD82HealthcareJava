@@ -1,7 +1,8 @@
 #Java server for call functionality
 Repo for the java server that is used for the call functionality.
-In the following sections you will find the documentation based on the JavaDoc.
+In the following sections you will find the documentation based on the JavaDoc.0
 
+##Documentation
 ###ControlPacket
 Contains the TCP-based protocol. Has getters and setters for each field. Documentation given below.
 
