@@ -29,7 +29,7 @@ public class ServerUtils{
      * Sets the i:th bit in a byte to specified value
      */
     public static byte setBit(byte input, int position, boolean val){
-            return val==true?(byte) (input | (1 << position)):(byte) (input | (1 << position));
+        return val? (byte) (input | (1 << position)):(byte) (input & ~(1 << position));
     }
 
     /**
