@@ -1,6 +1,9 @@
 import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.Socket;
 
 /**
  * ServerUtils
@@ -49,5 +52,13 @@ public class ServerUtils{
             destination[i]=source[i-start];
             
         return destination;
+    }
+
+    public static void sendBytes(byte[] bytesToSend, Socket clientSocket) throws IOException {
+    OutputStream out = clientSocket.getOutputStream(); 
+    DataOutputStream dos = new DataOutputStream(out);
+
+    if (bytesToSend.length > 0)
+        dos.write(bytesToSend, 0, bytesToSend.length);
     }
 }
