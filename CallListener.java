@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.net.DatagramSocket;
 import java.net.ServerSocket;
 import java.util.ArrayList;
 
@@ -25,9 +26,9 @@ public class CallListener {
                     e.printStackTrace();
                 }
             }
-            server.close();
+            //server.close();
         }catch(Exception e){
-            System.out.println("Connection to client failed")
+            System.out.println("Connection to client failed");
         }
     }
 

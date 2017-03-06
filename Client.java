@@ -30,10 +30,11 @@ public class Client extends Thread{
             System.out.println("Handling: " + tcpSocket.getRemoteSocketAddress());
             while(true){
                 ControlPacket ctrlPacket = new ControlPacket(readData(tcpSocket.getInputStream()));
-                if(number == null)
+
+                if(number == 0)
                     number = ctrlPacket.getSource();
                 if(ctrlPacket.getFlag(0))
-                    intitialize();
+                    initialize();
                 else
                     listener.relay(ctrlPacket);
             }
