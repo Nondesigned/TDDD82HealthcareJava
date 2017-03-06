@@ -10,11 +10,12 @@ class UDPClient
     
       DatagramSocket clientSocket = new DatagramSocket();
       InetAddress ip = InetAddress.getByName("localhost");
-      byte[] sendData = ByteBuffer.allocate(65507).putInt(123).array();
-      byte[] receiveData = testData();
+      byte[] sendData = testData();
+      //ByteBuffer.allocate(65507).putInt(123).array();
+      byte[] receiveData = new byte[65507];
       System.out.println("Lenght: " + ByteBuffer.wrap(sendData).getInt());
-      DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length);
-      clientSocket.connect(ip, 1338);
+      DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, ip, 1338);
+      
       clientSocket.send(sendPacket);
       DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
       clientSocket.receive(receivePacket);

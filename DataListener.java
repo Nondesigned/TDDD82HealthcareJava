@@ -16,6 +16,7 @@ public class DataListener extends Thread{
     public DataListener (int port) {
         this.port = port;
     }
+
     public void run(){
         try{
             DatagramSocket server = new DatagramSocket(port);
@@ -23,12 +24,11 @@ public class DataListener extends Thread{
                 try {
                     DatagramPacket packet = new DatagramPacket(bytes, bytes.length);
                     server.receive(packet);
-                    System.out.println("DATA:" + new String(packet.getData()));
                     byte[] bytes = Arrays.copyOfRange(packet.getData(), 4, 8);
                     int number = ByteBuffer.wrap(bytes).getInt();
-                    if(clientExists(number))
+                    if(clientExists(number)){
                         relay(packet,number);
-                    else{
+                    }else{
                         DataClient client = new DataClient(server, packet, this);
                         client.start();
                         clients.add(client);
