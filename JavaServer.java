@@ -20,41 +20,60 @@ import java.util.Properties;
  * Created by Oskar on 2017-03-03.
  */
 
-public class JavaServer{   
-    public JavaServer(){
+public class GCMHandler{   
+    private String user = "itkand_2017_3_1";
+    private String host = "db-und.ida.liu.se";
+    private String pass = "itkand_2017_3_1_7f41";
+    public GCMHandler(){
 
     }
     
-    public void startCall (int userID, int callerID) throws IOException{
+    private Connection getDBConnection() throws Exception{
+        Class.forName("com.mysql.jdbc.Driver");
+        Properties properties;
+        properties = new Properties();
+        properties.setProperty("user", "itkand_2017_3_1");
+        properties.setProperty("password", "itkand_2017_3_1_7f41");
+        return DriverManager.getConnection("jdbc:mysql://"+ host+":3306/"+user,properties);
+}
+
+    /**
+     * Send GCM
+     */
+    public void startCall (int callerID, int userID) throws IOException{
         String token = getToken(userID);
         sendPost(callerID,token);
-        
     }
-    private static String getToken(int userId) {
-        String user = "itkand_2017_3_1";
-        String host = "db-und.ida.liu.se";
-        String pass = "itkand_2017_3_1_7f41";
-        String token = null;
 
+    public void setToken(int userId,String token) {
         try {
-            Class.forName("com.mysql.jdbc.Driver");
-            Properties properties;
-            properties = new Properties();
-            properties.setProperty("user", "itkand_2017_3_1");
-            properties.setProperty("password", "itkand_2017_3_1_7f41");
+            Connection conn = getDBConnection();
+            String query = "REPLACE INTO token(owner_id,data) VALUES("+userId+",'"+token+"');";
+            Statement stmt = conn.createStatement();
+            stmt.executeQuery(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (Exception e){
+        	e.printStackTrace();
+        }
+    }
 
-            Connection conn = DriverManager.getConnection("jdbc:mysql://"+ host+":3306/"+user,properties);
+    /**
+     * getFireBase-token
+     */
+    private String getToken(int userId) {
+        String token = null;
+        try {
+            Connection conn = getDBConnection();
             String query = "{CALL get_user_token(" + userId + ")}";
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(query);
 
-            while (rs.next()){
+            while (rs.next())
                 token = rs.getString("data");
-            }
 
             stmt.close();
             conn.close();
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -76,7 +95,6 @@ public class JavaServer{
         con.setRequestProperty("Content-Type","application/json");
         con.setRequestProperty("Authorization" ,"key="+" "+authKey);
 
-
         DataOutputStream dos = new DataOutputStream(con.getOutputStream());
         dos.writeBytes(createJson(callerId,token).toString());
         dos.flush();
@@ -91,9 +109,6 @@ public class JavaServer{
             
         }
         in.close();
-
-
-
     }
 
     public JSONObject createJson(int callerId,String token){
@@ -104,7 +119,6 @@ public class JavaServer{
             payload.put("CALLER",callerId);
             JsonPost.put("data", payload);
             JsonPost.put("to", token);
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
