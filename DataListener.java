@@ -50,7 +50,7 @@ public class DataListener extends Thread{
         }
     }
 
-    public void relay(DatagramPacket packet, int number) {
+    public void relay(final DatagramPacket packet, int number) {
         packet.setAddress( clients.get(number));
         new Thread(){
             @Override
