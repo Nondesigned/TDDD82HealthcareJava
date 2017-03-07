@@ -16,7 +16,7 @@ import java.net.Socket;
 public class Client extends Thread{
     Socket tcpSocket;
     ControlPacket lastControlPacket;
-    boolean init = false;
+    boolean initialized = false;
     int number;
     CallListener listener;
     public Client (Socket incommingSocket, CallListener listener) {
@@ -33,8 +33,10 @@ public class Client extends Thread{
 
                 if(number == 0)
                     number = ctrlPacket.getSource();
-                if(ctrlPacket.getFlag(0))
-                    initialize();
+                System.out.println(ctrlPacket.getFlag(1));
+                if(ctrlPacket.getFlag(0) && !initialized)
+                    System.out.println("int");
+                    //initialize(ctrlPacket);
                 else
                     listener.relay(ctrlPacket);
             }
@@ -45,7 +47,14 @@ public class Client extends Thread{
 
 
 
-    public void initialize(){
+    public void initialize(ControlPacket ctrlPacket){
+        GCMHandler gcm = new GCMHandler();
+        try {
+            gcm.startCall(ctrlPacket.getSource(), ctrlPacket.getDestination());
+        } catch (Exception e) {
+            System.out.println("GCM could not be contacted");
+        }
+        if(tokenIsValid(ctrlPacket.getPayload()));
         //Get GCM token
         //Make GCM call
         //Init:
@@ -53,7 +62,8 @@ public class Client extends Thread{
         //- Get its address
     }
 
-    public boolean tokenIsValid(){
+    public boolean tokenIsValid(byte[] token){
+        System.out.println("TOKEN: "+ new String(token));
         return true;
     }
 

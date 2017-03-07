@@ -68,7 +68,7 @@ public class ControlPacket {
     /**
      * Sets the value of flag i
      */
-    public void setFlag(ControlFlags flags) {
+    public void setFlags(ControlFlags flags) {
         data = ServerUtils.setRange(flags.getBytes(), data, 8);
     }
 

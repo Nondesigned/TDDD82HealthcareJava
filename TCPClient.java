@@ -18,7 +18,7 @@ class TCPClient
         int src = scan.nextInt();        
         System.out.println("Enter destination:");
         int dest = scan.nextInt();
-        String ip = "192.168.199.128";
+        String ip = "localhost";
         int port = 1337;
         Socket clientSocket = new Socket(ip, port);
         while(true){ 
@@ -32,7 +32,8 @@ class TCPClient
             ctrl.setPayload(val2.getBytes());
             ControlFlags flags = new ControlFlags();
             for (ControlFlag flag : ControlFlag.values())
-            flags.setFlag(flag, true);
+                flags.setFlag(flag, true);
+            ctrl.setFlags(flags);
             ServerUtils.sendBytes(ctrl.getPacketBytes(),clientSocket);
             System.out.println(new ControlPacket(readData(clientSocket.getInputStream())).getDestination());
         }
