@@ -15,7 +15,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
-
+import com.mysql.jdbc.Driver;
 /**
  * Created by Oskar on 2017-03-03.
  */
@@ -29,7 +29,7 @@ public class GCMHandler{
     }
     
     private Connection getDBConnection() throws Exception{
-        Class.forName("com.mysql.jdbc.Driver");
+        //Class.forName("");
         Properties properties;
         properties = new Properties();
         properties.setProperty("user", "itkand_2017_3_1");

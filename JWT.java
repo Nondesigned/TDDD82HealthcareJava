@@ -22,10 +22,19 @@ import javax.print.attribute.standard.PageRanges;
  */
 public class JWT {
     String token;
+    String certLoc = "cert.pem";
     public JWT (byte[] token) {
         this.token = new String(token);
     }
 
+    public JWT (byte[] token, String certloc) {
+        this.token = new String(token);
+        this.certLoc = certLoc;
+    }
+
+    /**
+     * True if JWT is valid
+    */
     public boolean valid(){
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
@@ -47,17 +56,26 @@ public class JWT {
         
     }
 
+    public int getNumber(){
+        return 0;
+    }
+    /**
+     * Get header string
+    */
     private String getHeaders(){
         return token.split("\\.")[0];
     }
 
-        
+    /**
+     * Get payload string
+    */
     private String getPayload(){
         return token.split("\\.")[1];   
     }
-
-
     
+    /**
+     * Get the base64URLdecoded signature bytes
+     */
     private byte[] getSignature()throws Exception{
         Base64.Decoder d = Base64.getUrlDecoder();
         return d.decode(token.split("\\.")[2].getBytes());

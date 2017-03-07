@@ -45,14 +45,16 @@ public class Client extends Thread{
 
 
     public void initialize(ControlPacket ctrlPacket){
-        //GCMHandler gcm = new GCMHandler();
+        GCMHandler gcm = new GCMHandler();
         try {
-            //gcm.startCall(ctrlPacket.getSource(), ctrlPacket.getDestination());
+            gcm.startCall(ctrlPacket.getSource(), ctrlPacket.getDestination());
         } catch (Exception e) {
             System.out.println("GCM could not be contacted");
+            return;
         }
-        if(tokenIsValid(ctrlPacket.getPayload()))
-            initialized = true;
+        if(!tokenIsValid(ctrlPacket.getPayload()))
+            return;    
+        initialized = true;
         //Get GCM token
         //Make GCM call
         //Init:
@@ -60,12 +62,10 @@ public class Client extends Thread{
         //- Get its address
     }
 
-    public boolean tokenIsValid(byte[] token){
+    public boolean tokenIsValid(byte[] token, int number){
         JWT jwt = new JWT(token);
-        jwt.valid();
-        
-        return true;
-    }
+        return (jwt.valid() && jwt.getNumber() == number);
+        }
 
     public byte[] readData(InputStream input) throws Exception{
         DataInputStream dataInputStream = new DataInputStream(input);
