@@ -30,32 +30,6 @@ public class JavaServer{
         sendPost(callerID,token);
         
     }
-
-    public void setToken(int userId,String token) {
-        String user = "itkand_2017_3_1";
-        String host = "db-und.ida.liu.se";
-        String pass = "itkand_2017_3_1_7f41";
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            Properties properties;
-            properties = new Properties();
-            properties.setProperty("user", "itkand_2017_3_1");
-            properties.setProperty("password", "itkand_2017_3_1_7f41");
-
-            Connection conn = DriverManager.getConnection("jdbc:mysql://"+ host+":3306/"+user,properties);
-            String query = "REPLACE INTO token(owner_id,data) VALUES("+userId+",'"+token+"');";
-            Statement stmt = conn.createStatement();
-            stmt.executeQuery(query);
-
-            
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        catch (Exception e){
-        	e.printStackTrace();
-        }
-    }
-
     private static String getToken(int userId) {
         String user = "itkand_2017_3_1";
         String host = "db-und.ida.liu.se";
