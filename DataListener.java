@@ -21,15 +21,17 @@ public class DataListener extends Thread{
         try {
             server =  new DatagramSocket(port);
         } catch (Exception e) {
-            //TODO: handle exception
+            System.out.println("Socket Couldn't be created");
         }
     }
 
+    /**
+     * Listen for packets and relay if connection exists.
+     */
     public void run(){
         try {
             while(true){
                 final DatagramPacket packet = new DatagramPacket(bytes, bytes.length);
-                
                 server.receive(packet);
                 byte[] numberBytes = Arrays.copyOfRange(packet.getData(), 0, 4);
                 int sender = ByteBuffer.wrap(numberBytes).getInt();
@@ -37,11 +39,14 @@ public class DataListener extends Thread{
                 int receiver = ByteBuffer.wrap(numberBytes).getInt();
                 if(!clients.containsKey(sender))
                     clients.put(sender, packet.getAddress());
+                else if(!clients.get(sender).equals(packet.getAddress()))
+                    clients.replace(sender, packet.getAddress());
                 if(clients.containsKey(receiver))
                     relay(packet, receiver);
             }
         } catch (Exception e) {
-            
+            System.out.println("receive handling error");
+            run();
         }
     }
 
