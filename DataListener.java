@@ -1,60 +1,60 @@
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 /**
  * DataListener
  */
 public class DataListener extends Thread{
-    ArrayList<DataClient> clients = new ArrayList<DataClient>();
+    HashMap<Integer, InetAddress> clients = new HashMap<>();
     byte[] bytes = new byte[65507];
     int port;
+    DatagramSocket server;
 
     public DataListener (int port) {
         this.port = port;
+        try {
+            server =  new DatagramSocket(port);
+        } catch (Exception e) {
+            //TODO: handle exception
+        }
     }
 
     public void run(){
-        try{
-            DatagramSocket server = new DatagramSocket(port);
+        try {
             while(true){
-                try {
-                    DatagramPacket packet = new DatagramPacket(bytes, bytes.length);
-                    server.receive(packet);
-                    byte[] bytes = Arrays.copyOfRange(packet.getData(), 4, 8);
-                    int number = ByteBuffer.wrap(bytes).getInt();
-                    if(clientExists(number)){
-                        relay(packet,number);
-                    }else{
-                        DataClient client = new DataClient(server, packet, this);
-                        client.start();
-                        clients.add(client);
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                final DatagramPacket packet = new DatagramPacket(bytes, bytes.length);
+                
+                server.receive(packet);
+                byte[] numberBytes = Arrays.copyOfRange(packet.getData(), 0, 4);
+                int sender = ByteBuffer.wrap(numberBytes).getInt();
+                numberBytes = Arrays.copyOfRange(packet.getData(), 4, 8);
+                int receiver = ByteBuffer.wrap(numberBytes).getInt();
+                if(!clients.containsKey(sender))
+                    clients.put(sender, packet.getAddress());
+                if(clients.containsKey(receiver))
+                    relay(packet, receiver);
             }
-            //server.close();
-        }catch(Exception e){
-            e.printStackTrace();
-            System.out.println("Connection to client failed");
+        } catch (Exception e) {
+            
         }
     }
 
     public void relay(DatagramPacket packet, int number) {
-        for (DataClient client : clients) {
-            if(client.getNumber() == number)
-                client.sendDataPacket(packet);
-        }
+        packet.setAddress( clients.get(number));
+        new Thread(){
+            @Override
+            public void run() {
+                try {
+                    server.send(packet);
+                } catch (Exception e) {}
+            }
+        }.start();        
     }
 
-    public boolean clientExists(int number){
-        for(DataClient client : clients)
-            if(client.getNumber() == number)
-                return true;
-        return false; 
-    }
 }
