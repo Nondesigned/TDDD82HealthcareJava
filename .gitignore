@@ -13,3 +13,6 @@ hs_err_pid*
 
 Tester.java
 .vscode/
+
+#No cetificates
+*.pem

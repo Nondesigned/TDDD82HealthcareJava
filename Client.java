@@ -9,7 +9,6 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-
 /**
  * Client
  */
@@ -33,10 +32,8 @@ public class Client extends Thread{
 
                 if(number == 0)
                     number = ctrlPacket.getSource();
-                System.out.println(ctrlPacket.getFlag(1));
                 if(ctrlPacket.getFlag(0) && !initialized)
-                    System.out.println("int");
-                    //initialize(ctrlPacket);
+                    initialize(ctrlPacket);
                 else
                     listener.relay(ctrlPacket);
             }
@@ -48,13 +45,14 @@ public class Client extends Thread{
 
 
     public void initialize(ControlPacket ctrlPacket){
-        GCMHandler gcm = new GCMHandler();
+        //GCMHandler gcm = new GCMHandler();
         try {
-            gcm.startCall(ctrlPacket.getSource(), ctrlPacket.getDestination());
+            //gcm.startCall(ctrlPacket.getSource(), ctrlPacket.getDestination());
         } catch (Exception e) {
             System.out.println("GCM could not be contacted");
         }
-        if(tokenIsValid(ctrlPacket.getPayload()));
+        if(tokenIsValid(ctrlPacket.getPayload()))
+            initialized = true;
         //Get GCM token
         //Make GCM call
         //Init:
@@ -63,7 +61,9 @@ public class Client extends Thread{
     }
 
     public boolean tokenIsValid(byte[] token){
-        System.out.println("TOKEN: "+ new String(token));
+        JWT jwt = new JWT(token);
+        jwt.valid();
+        
         return true;
     }
 
