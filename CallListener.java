@@ -46,10 +46,14 @@ public class CallListener {
     public void removeFromList(int number){
         try{
             for(int i = 0; i < clients.size(); i++)
-                if(clients.get(i).getNumber() == number|| clients.get(i).getNumber() == 0)
+                if(clients.get(i).getNumber() == number ){
+                    clients.get(i).killStream();
                     clients.remove(i);
+                }else if(clients.get(i).getNumber() == 0){
+                    clients.remove(i);
+                }
         }catch(Exception e){
-            System.out.println("Suspect behavior detected from number: "+number);
+            System.out.println("Suspect behavior or closing stream: "+number);
         }
                 
     }

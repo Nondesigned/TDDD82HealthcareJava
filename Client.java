@@ -35,10 +35,7 @@ public class Client extends Thread{
                 if(ctrlPacket.getFlag(0) && !initialized)
                     initialize(ctrlPacket);
                 else
-                    listener.relay(ctrlPacket);
-                Thread.sleep(2000);
-                if(ctrlPacket.getSource() == 111)
-                    tcpSocket.getOutputStream().close();
+                    listener.relay(ctrlPacket);  
             }
         } catch (Exception e) {
             System.out.println("Connection Lost");
@@ -53,8 +50,8 @@ public class Client extends Thread{
         try {
             gcm.startCall(ctrlPacket.getSource(), ctrlPacket.getDestination());
         } catch (Exception e) {
-            System.out.println("GCM could not be contacted");
-            return;
+            //System.out.println("GCM could not be contacted");
+            //return;
         }
         if(!tokenIsValid(ctrlPacket.getPayload(), ctrlPacket.getSource())){
             listener.removeFromList(ctrlPacket.getSource());
@@ -64,8 +61,8 @@ public class Client extends Thread{
     }
 
     public boolean tokenIsValid(byte[] token, int number){
-        JWT jwt = new JWT(token);
-        return (jwt.valid() && jwt.getNumber() == number);
+            JWT jwt = new JWT(token);
+            return (jwt.valid() && jwt.getNumber() == number && number != 0);
         }
 
     public byte[] readData(InputStream input) throws Exception{
@@ -74,7 +71,7 @@ public class Client extends Thread{
         try {
             dataInputStream.readFully(data);
         } catch (Exception e) {
-            tcpSocket.close();
+            killStream();
         }
         return data;
     }
@@ -83,11 +80,14 @@ public class Client extends Thread{
         return this.number;
     }
 
+    public void killStream() throws Exception{
+        tcpSocket.getOutputStream().close();
+    }
+
     public void sendControlPacket(ControlPacket pkt) {
         try{
             ServerUtils.sendBytes(pkt.getPacketBytes(), tcpSocket);
-        }catch (Exception e){
-        }
+        }catch (Exception e){}
     }
     
     @Override

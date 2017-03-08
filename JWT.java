@@ -13,10 +13,13 @@ import java.security.cert.X509Certificate;
 import java.security.interfaces.RSAPublicKey;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.Iterator;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import javax.crypto.Cipher;
 import javax.print.attribute.standard.PageRanges;
-
 /**
  * JWT
  */
@@ -57,7 +60,17 @@ public class JWT {
     }
 
     public int getNumber(){
-        return 0;
+        try{
+            Base64.Decoder d = Base64.getUrlDecoder();
+            JSONObject obj = new JSONObject(new String(d.decode(getPayload())));
+            Iterator<String> keys= obj.keys();
+            String keyValue = (String)keys.next();
+            String number = (String)obj.get("sub");
+            return Integer.parseInt(number);
+        }catch(Exception e){
+            System.out.println("Token has invalid number");
+            return 0;
+        }
     }
     /**
      * Get header string
@@ -74,7 +87,7 @@ public class JWT {
     }
     
     /**
-     * Get the base64URLdecoded signature bytes
+     * Get the  signature bytes
      */
     private byte[] getSignature()throws Exception{
         Base64.Decoder d = Base64.getUrlDecoder();
