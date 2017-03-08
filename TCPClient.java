@@ -33,6 +33,7 @@ class TCPClient
             ControlFlags flags = new ControlFlags();
             for (ControlFlag flag : ControlFlag.values())
                 flags.setFlag(flag, true);
+        
             ctrl.setFlags(flags);
             ServerUtils.sendBytes(ctrl.getPacketBytes(),clientSocket);
             ServerUtils.sendBytes(ctrl.getPacketBytes(),clientSocket);

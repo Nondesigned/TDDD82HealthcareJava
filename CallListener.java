@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 
 
+
 /**
  * CallListener
  * Listens for calls and creates new call objects if
@@ -42,4 +43,14 @@ public class CallListener {
                 client.sendControlPacket(pkt);
     }
 
+    public void removeFromList(int number){
+        try{
+            for(int i = 0; i < clients.size(); i++)
+                if(clients.get(i).getNumber() == number|| clients.get(i).getNumber() == 0)
+                    clients.remove(i);
+        }catch(Exception e){
+            System.out.println("Suspect behavior detected from number: "+number);
+        }
+                
+    }
 }

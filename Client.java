@@ -36,9 +36,13 @@ public class Client extends Thread{
                     initialize(ctrlPacket);
                 else
                     listener.relay(ctrlPacket);
+                Thread.sleep(2000);
+                if(ctrlPacket.getSource() == 111)
+                    tcpSocket.getOutputStream().close();
             }
         } catch (Exception e) {
             System.out.println("Connection Lost");
+            listener.removeFromList(number);
         }
     }
 
@@ -52,14 +56,11 @@ public class Client extends Thread{
             System.out.println("GCM could not be contacted");
             return;
         }
-        if(!tokenIsValid(ctrlPacket.getPayload(), ctrlPacket.getSource()))
-            return;    
+        if(!tokenIsValid(ctrlPacket.getPayload(), ctrlPacket.getSource())){
+            listener.removeFromList(ctrlPacket.getSource());
+            return;
+        }
         initialized = true;
-        //Get GCM token
-        //Make GCM call
-        //Init:
-        //- Init, get token for Client
-        //- Get its address
     }
 
     public boolean tokenIsValid(byte[] token, int number){
