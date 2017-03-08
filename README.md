@@ -6,7 +6,7 @@ In the following sections you will find the documentation based on the JavaDoc.0
 ###ControlPacket
 Contains the TCP-based protocol. Has getters and setters for each field. Documentation given below.
 
-###### `public class ControlPacket`
+###### `public class ControlPacket` 
 
 ControlPacket
 
