@@ -52,7 +52,7 @@ public class Client extends Thread{
             System.out.println("GCM could not be contacted");
             return;
         }
-        if(!tokenIsValid(ctrlPacket.getPayload()))
+        if(!tokenIsValid(ctrlPacket.getPayload(), ctrlPacket.getSource()))
             return;    
         initialized = true;
         //Get GCM token

@@ -21,20 +21,20 @@ import com.mysql.jdbc.Driver;
  */
 
 public class GCMHandler{   
-    private String user = "itkand_2017_3_1";
-    private String host = "db-und.ida.liu.se";
-    private String pass = "itkand_2017_3_1_7f41";
+    private String user = "test";
+    private String host = "itkand-3-1.tddd82-2017.ida.liu.se";
+    private String pass = "kaffekaka";
+    private String db = "healthcare";
     public GCMHandler(){
 
     }
     
     private Connection getDBConnection() throws Exception{
-        //Class.forName("");
         Properties properties;
         properties = new Properties();
-        properties.setProperty("user", "itkand_2017_3_1");
-        properties.setProperty("password", "itkand_2017_3_1_7f41");
-        return DriverManager.getConnection("jdbc:mysql://"+ host+":3306/"+user,properties);
+        properties.setProperty("user", user);
+        properties.setProperty("password", pass);
+        return DriverManager.getConnection("jdbc:mysql://"+ host+":3306/"+db,properties);
 }
 
     /**
@@ -48,8 +48,8 @@ public class GCMHandler{
     public void setToken(int userId,String token) {
         try {
             Connection conn = getDBConnection();
-            String query = "REPLACE INTO token(owner_id,data) VALUES("+userId+",'"+token+"');";
-            Statement stmt = conn.createStatement();
+            String query    = "REPLACE INTO token(owner_id,data) VALUES("+userId+",'"+token+"');";
+            Statement stmt  = conn.createStatement();
             stmt.executeQuery(query);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -65,7 +65,7 @@ public class GCMHandler{
         String token = null;
         try {
             Connection conn = getDBConnection();
-            String query = "{CALL get_user_token(" + userId + ")}";
+            String query = "SELECT data FROM healthcare.token WHERE owner_number="+userId+";";
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(query);
 
