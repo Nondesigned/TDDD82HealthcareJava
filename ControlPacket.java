@@ -11,7 +11,7 @@ public class ControlPacket {
     }
 
     /**-----|Public Methods|------**/
-    
+
     //----{GETERS}----
 
     /**
@@ -61,7 +61,15 @@ public class ControlPacket {
      * Returns payload content
      */
     public byte[] getPayload() {
-        return Arrays.copyOfRange(data, 44, 44+getContentLength());
+
+        return Arrays.copyOfRange(data, 60, 60+getContentLength());
+    }
+    /**
+     * Returns IV
+     */
+    public byte[] getIV() {
+
+        return Arrays.copyOfRange(data, 44, 60);
     }
 
     //Setters
@@ -85,7 +93,7 @@ public class ControlPacket {
         byte[] bytes = ByteBuffer.allocate(4).putInt(destination).array();
         data = ServerUtils.setRange(bytes, data, 4);
     }
-    
+
     /**
      * Sets key for symmetric encryption
      */
@@ -97,42 +105,45 @@ public class ControlPacket {
      * Sets payload content and sets the Content-length
      */
     public void setPayload(byte[] content) {
-        data = ServerUtils.setRange(content, data, 44);
+        data = ServerUtils.setRange(content, data, 60);
         data = ServerUtils.setRange(ByteBuffer.allocate(2).putShort((short)content.length).array(), data, 10);
+    }
+    public void setIV(byte[] content) {
+        data = ServerUtils.setRange(content, data, 44,60);
     }
 
     /*------|Private methods|------*/
 
-    /** 
-     * Returns byte[] with flags 
+    /**
+     * Returns byte[] with flags
      */
     private byte[] getFlagArray(){
         return Arrays.copyOfRange(data, 8, 10);
     }
 
     /**
-     *  Returns byte[] with source address 
+     *  Returns byte[] with source address
      */
     private byte[] getSourceArray(){
         return Arrays.copyOfRange(data, 0, 4);
     }
 
     /**
-     *  Returns byte[] with destination address 
+     *  Returns byte[] with destination address
      */
     private byte[] getDestinationArray(){
         return Arrays.copyOfRange(data, 4, 8);
     }
-    
+
     /**
-     *  Returns byte[] with destination address 
+     *  Returns byte[] with destination address
      */
     private byte[] getKeyArray(){
         return Arrays.copyOfRange(data, 12, 44);
     }
-    
+
     /**
-     *  Returns byte[] with contetlength 
+     *  Returns byte[] with contetlength
      */
     private byte[] getContentLengthArray(){
         return Arrays.copyOfRange(data, 10, 12);
