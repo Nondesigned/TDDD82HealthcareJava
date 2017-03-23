@@ -50,13 +50,14 @@ public class Client extends Thread{
         try {
             gcm.startCall(ctrlPacket.getSource(), ctrlPacket.getDestination());
         } catch (Exception e) {
+            e.printStackTrace();
             //System.out.println("GCM could not be contacted");
             //return;
         }
-        if(!tokenIsValid(ctrlPacket.getPayload(), ctrlPacket.getSource())){
+        /*if(!tokenIsValid(ctrlPacket.getPayload(), ctrlPacket.getSource())){
             listener.removeFromList(ctrlPacket.getSource());
             return;
-        }
+        }*/
         initialized = true;
     }
 
