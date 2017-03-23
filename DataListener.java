@@ -55,6 +55,6 @@ public class DataListener extends Thread{
         for(DataClient client : clients)
             if(client.getNumber() == number)
                 return true;
-        return false; 
+        return false;
     }
 }

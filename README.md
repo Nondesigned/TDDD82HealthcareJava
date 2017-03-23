@@ -3,8 +3,28 @@ Repo for the java server that is used for the call functionality.
 In the following sections you will find the documentation based on the JavaDoc.0
 
 #NOTE!
+##Server
 Remember to add the keystore *certs.jks*.
+##Clients
+In order to be able to use self-signed certificates you have to accept them on the client-side.
+Use the following context to create a new factory for the creation of an SSL-socket:
+```java
+    SSLContext context = SSLContext.getInstance("TLS");
+        TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
+            public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                    return new java.security.cert.X509Certificate[] {};
+            }
 
+            public void checkClientTrusted(X509Certificate[] chain,
+                            String authType) throws CertificateException {
+            }
+
+            public void checkServerTrusted(X509Certificate[] chain,
+                            String authType) throws CertificateException {
+            }
+        } };
+        context.init(null, trustAllCerts, null);
+```
 ##Documentation
 ###ControlPacket
 Contains the TCP-based protocol. Has getters and setters for each field. Documentation given below.
