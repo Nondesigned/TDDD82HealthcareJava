@@ -2,7 +2,14 @@ import java.io.*;
 import java.net.*;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.Scanner;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 class TCPClient
 {   
@@ -14,13 +21,30 @@ class TCPClient
         /*System.out.println("Enter IP:");
         String ip = scan.nextLine();
         */
+        SSLContext context = SSLContext.getInstance("TLS");
+        TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
+            public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                    return new java.security.cert.X509Certificate[] {};
+            }
+
+            public void checkClientTrusted(X509Certificate[] chain,
+                            String authType) throws CertificateException {
+            }
+
+            public void checkServerTrusted(X509Certificate[] chain,
+                            String authType) throws CertificateException {
+            }
+        } };
+        context.init(null, trustAllCerts, null);
         System.out.println("Enter source:");
         int src = scan.nextInt();        
         System.out.println("Enter destination:");
         int dest = scan.nextInt();
-        String ip = "192.168.199.128";
+        String ip = "localhost";
         int port = 1337;
-        Socket clientSocket = new Socket(ip, port);
+
+        SSLSocketFactory factory = context.getSocketFactory();
+        Socket clientSocket = factory.createSocket(ip, port);//new Socket(ip, port);
         while(true){ 
             byte[] bytes = new byte[2044];
             ControlPacket ctrl = new ControlPacket(bytes);

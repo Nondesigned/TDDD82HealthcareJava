@@ -2,6 +2,9 @@
 Repo for the java server that is used for the call functionality.
 In the following sections you will find the documentation based on the JavaDoc.0
 
+#NOTE!
+Remember to add the keystore *certs.jks*.
+
 ##Documentation
 ###ControlPacket
 Contains the TCP-based protocol. Has getters and setters for each field. Documentation given below.
