@@ -20,12 +20,7 @@ public class CallListener {
         System.setProperty("javax.net.ssl.keyStore", "certs.jks");
         System.setProperty("javax.net.ssl.keyStorePassword", "kaffekaka");
         SSLServerSocketFactory factory=(SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
-        String trustStore = System.getProperty("javax.net.ssl.keyStore");
-        if (trustStore == null) {
-            System.out.println("javax.net.ssl.trustStore is not defined");
-        } else {
-            System.out.println("javax.net.ssl.trustStore = " + trustStore);
-        }
+        
         try{
             ServerSocket server = factory.createServerSocket(port);
             
