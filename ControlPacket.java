@@ -1,4 +1,3 @@
-package tddd82.healthcare;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
