@@ -8,6 +8,7 @@ import javax.net.ssl.SSLServerSocketFactory;
 
 
 
+
 /**
  * CallListener
  * Listens for calls and creates new call objects if
@@ -49,4 +50,18 @@ public class CallListener {
                 client.sendControlPacket(pkt);
     }
 
+    public void removeFromList(int number){
+        try{
+            for(int i = 0; i < clients.size(); i++)
+                if(clients.get(i).getNumber() == number ){
+                    clients.get(i).killStream();
+                    clients.remove(i);
+                }else if(clients.get(i).getNumber() == 0){
+                    clients.remove(i);
+                }
+        }catch(Exception e){
+            System.out.println("Suspect behavior or closing stream: "+number);
+        }
+                
+    }
 }

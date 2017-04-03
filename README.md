@@ -29,7 +29,7 @@ Use the following context to create a new factory for the creation of an SSL-soc
 ###ControlPacket
 Contains the TCP-based protocol. Has getters and setters for each field. Documentation given below.
 
-###### `public class ControlPacket`
+###### `public class ControlPacket` 
 
 ControlPacket
 

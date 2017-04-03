@@ -9,14 +9,13 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-
 /**
  * Client
  */
 public class Client extends Thread{
     Socket tcpSocket;
     ControlPacket lastControlPacket;
-    boolean init = false;
+    boolean initialized = false;
     int number;
     CallListener listener;
     public Client (Socket incommingSocket, CallListener listener) {
@@ -33,29 +32,39 @@ public class Client extends Thread{
 
                 if(number == 0)
                     number = ctrlPacket.getSource();
-                if(ctrlPacket.getFlag(0))
-                    initialize();
+                if(ctrlPacket.getFlag(0) && !initialized)
+                    initialize(ctrlPacket);
                 else
-                    listener.relay(ctrlPacket);
+                    listener.relay(ctrlPacket);  
             }
         } catch (Exception e) {
             System.out.println("Connection Lost");
+            listener.removeFromList(number);
         }
     }
 
 
 
-    public void initialize(){
-        //Get GCM token
-        //Make GCM call
-        //Init:
-        //- Init, get token for Client
-        //- Get its address
+    public void initialize(ControlPacket ctrlPacket){
+        GCMHandler gcm = new GCMHandler();
+        try {
+            gcm.startCall(ctrlPacket.getSource(), ctrlPacket.getDestination());
+        } catch (Exception e) {
+            e.printStackTrace();
+            //System.out.println("GCM could not be contacted");
+            //return;
+        }
+        /*if(!tokenIsValid(ctrlPacket.getPayload(), ctrlPacket.getSource())){
+            listener.removeFromList(ctrlPacket.getSource());
+            return;
+        }*/
+        initialized = true;
     }
 
-    public boolean tokenIsValid(){
-        return true;
-    }
+    public boolean tokenIsValid(byte[] token, int number){
+            JWT jwt = new JWT(token);
+            return (jwt.valid() && jwt.getNumber() == number && number != 0);
+        }
 
     public byte[] readData(InputStream input) throws Exception{
         DataInputStream dataInputStream = new DataInputStream(input);
@@ -63,7 +72,7 @@ public class Client extends Thread{
         try {
             dataInputStream.readFully(data);
         } catch (Exception e) {
-            tcpSocket.close();
+            killStream();
         }
         return data;
     }
@@ -72,11 +81,14 @@ public class Client extends Thread{
         return this.number;
     }
 
+    public void killStream() throws Exception{
+        tcpSocket.getOutputStream().close();
+    }
+
     public void sendControlPacket(ControlPacket pkt) {
         try{
             ServerUtils.sendBytes(pkt.getPacketBytes(), tcpSocket);
-        }catch (Exception e){
-        }
+        }catch (Exception e){}
     }
     
     @Override
