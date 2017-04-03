@@ -3,6 +3,8 @@ import java.net.DatagramSocket;
 import java.net.ServerSocket;
 import java.util.ArrayList;
 
+import javax.net.ssl.SSLServerSocketFactory;
+
 
 
 
@@ -16,8 +18,13 @@ public class CallListener {
     ArrayList<Client> clients = new ArrayList<Client>();
     
     public CallListener (int port) {
+        System.setProperty("javax.net.ssl.keyStore", "certs.jks");
+        System.setProperty("javax.net.ssl.keyStorePassword", "kaffekaka");
+        SSLServerSocketFactory factory=(SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
+        
         try{
-            ServerSocket server = new ServerSocket(port);
+            ServerSocket server = factory.createServerSocket(port);
+            
             while(true){
                 try {
                     Client client = new Client(server.accept(),this);
