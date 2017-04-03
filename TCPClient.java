@@ -20,7 +20,11 @@ class TCPClient
         Scanner scan = new Scanner(System.in);
         System.out.println("Enter IP:");
         String ip = scan.nextLine();
+<<<<<<< HEAD
         
+=======
+        */
+>>>>>>> 7714a6d13546f7cf0cd647f6816553ed20c85f6d
         SSLContext context = SSLContext.getInstance("TLS");
         TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
             public java.security.cert.X509Certificate[] getAcceptedIssuers() {
@@ -36,7 +40,7 @@ class TCPClient
             }
         } };
         context.init(null, trustAllCerts, null);
-        
+
         System.out.println("Enter source:");
         int src = scan.nextInt();        
         System.out.println("Enter destination:");
@@ -47,6 +51,7 @@ class TCPClient
         Socket clientSocket = factory.createSocket(ip, port);//new Socket(ip, port);
 
         //Socket clientSocket = new Socket(ip, port);
+
         while(true){ 
             byte[] bytes = new byte[2044];
             ControlPacket ctrl = new ControlPacket(bytes);
