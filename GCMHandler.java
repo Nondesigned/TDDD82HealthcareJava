@@ -41,7 +41,8 @@ public class GCMHandler{
      * Send GCM
      */
     public void startCall (int callerID, int userID) throws IOException{
-        String token = getToken(userID);
+        String token = getToken(userID);    
+
         sendPost(callerID,token);
     }
 
@@ -62,16 +63,17 @@ public class GCMHandler{
      * getFireBase-token
      */
     private String getToken(int userId) {
+        
         String token = null;
         try {
             Connection conn = getDBConnection();
             String query = "SELECT data FROM healthcare.token WHERE owner_number="+userId+";";
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(query);
-
+            
             while (rs.next())
                 token = rs.getString("data");
-
+            
             stmt.close();
             conn.close();
         } catch (SQLException e) {

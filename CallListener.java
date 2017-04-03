@@ -16,8 +16,18 @@ public class CallListener {
     ArrayList<Client> clients = new ArrayList<Client>();
     
     public CallListener (int port) {
+        System.setProperty("javax.net.ssl.keyStore", "certs.jks");
+        System.setProperty("javax.net.ssl.keyStorePassword", "kaffekaka");
+        SSLServerSocketFactory factory=(SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
+        String trustStore = System.getProperty("javax.net.ssl.keyStore");
+        if (trustStore == null) {
+            System.out.println("javax.net.ssl.trustStore is not defined");
+        } else {
+            System.out.println("javax.net.ssl.trustStore = " + trustStore);
+        }
         try{
-            ServerSocket server = new ServerSocket(port);
+            ServerSocket server = factory.createServerSocket(port);
+            
             while(true){
                 try {
                     Client client = new Client(server.accept(),this);
