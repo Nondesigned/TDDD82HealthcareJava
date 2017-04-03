@@ -20,11 +20,6 @@ class TCPClient
         Scanner scan = new Scanner(System.in);
         System.out.println("Enter IP:");
         String ip = scan.nextLine();
-<<<<<<< HEAD
-        
-=======
-        */
->>>>>>> 7714a6d13546f7cf0cd647f6816553ed20c85f6d
         SSLContext context = SSLContext.getInstance("TLS");
         TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
             public java.security.cert.X509Certificate[] getAcceptedIssuers() {
