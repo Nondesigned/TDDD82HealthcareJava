@@ -66,7 +66,7 @@ public class CallListener {
                     clients.remove(i);
                 }
         }catch(Exception e){
-            System.out.println("Suspect behavior or closing stream: "+number);
+            System.out.println("Closing stream for number: "+number);
         }
                 
     }
