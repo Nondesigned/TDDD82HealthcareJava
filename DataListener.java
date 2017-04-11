@@ -43,7 +43,7 @@ public class DataListener extends Thread{
                     ips.put(sender, packet.getAddress());
                 else if(!ips.get(sender).equals(packet.getAddress()))
                     ips.replace(sender, packet.getAddress());
-                    
+
                 if(!ports.containsKey(sender))
                     ports.put(sender, packet.getPort());
                 else if(!ports.get(sender).equals(packet.getPort()))
