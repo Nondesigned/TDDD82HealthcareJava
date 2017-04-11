@@ -11,7 +11,8 @@ import java.util.HashMap;
  * DataListener
  */
 public class DataListener extends Thread{
-    HashMap<Integer, InetAddress> clients = new HashMap<>();
+    HashMap<Integer, InetAddress> ips = new HashMap<>();
+    HashMap<Integer, Integer> ports = new HashMap<>();
     byte[] bytes = new byte[65507];
     int port;
     DatagramSocket server;
@@ -37,11 +38,18 @@ public class DataListener extends Thread{
                 int sender = ByteBuffer.wrap(numberBytes).getInt();
                 numberBytes = Arrays.copyOfRange(packet.getData(), 4, 8);
                 int receiver = ByteBuffer.wrap(numberBytes).getInt();
-                if(!clients.containsKey(sender))
-                    clients.put(sender, packet.getAddress());
-                else if(!clients.get(sender).equals(packet.getAddress()))
-                    clients.replace(sender, packet.getAddress());
-                if(clients.containsKey(receiver))
+                
+                if(!ips.containsKey(sender))
+                    ips.put(sender, packet.getAddress());
+                else if(!ips.get(sender).equals(packet.getAddress()))
+                    ips.replace(sender, packet.getAddress());
+                    
+                if(!ports.containsKey(sender))
+                    ports.put(sender, packet.getPort());
+                else if(!ports.get(sender).equals(packet.getPort()))
+                    ports.replace(sender, packet.getPort());
+                    
+                if(ips.containsKey(receiver) && ports.containsKey(sender))
                     relay(packet, receiver);
             }
         } catch (Exception e) {
@@ -51,7 +59,8 @@ public class DataListener extends Thread{
     }
 
     public void relay(final DatagramPacket packet, int number) {
-        packet.setAddress( clients.get(number));
+        packet.setAddress( ips.get(number));
+        packet.setPort(ports.get(number));
         new Thread(){
             @Override
             public void run() {
