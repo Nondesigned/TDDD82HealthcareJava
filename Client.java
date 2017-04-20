@@ -48,16 +48,16 @@ public class Client extends Thread{
     public void initialize(ControlPacket ctrlPacket){
         GCMHandler gcm = new GCMHandler();
         try {
-            gcm.startCall(ctrlPacket.getSource(), ctrlPacket.getDestination());
+            gcm.startCall(ctrlPacket.getSource(), ctrlPacket.getDestination(), ctrlPacket.getFlag(8));
         } catch (Exception e) {
             e.printStackTrace();
             //System.out.println("GCM could not be contacted");
             //return;
         }
-        /*if(!tokenIsValid(ctrlPacket.getPayload(), ctrlPacket.getSource())){
+        if(!tokenIsValid(ctrlPacket.getPayload(), ctrlPacket.getSource())){
             listener.removeFromList(ctrlPacket.getSource());
             return;
-        }*/
+        }
         initialized = true;
     }
 

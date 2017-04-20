@@ -81,6 +81,7 @@ class TCPClient
                 stringflags +="\n";
             }
             System.out.println("End flags:" + stringflags);
+            System.out.println("FLAG:" + ctrl.getFlag(8));
             ServerUtils.sendBytes(ctrl.getPacketBytes(),clientSocket);
             ServerUtils.sendBytes(ctrl.getPacketBytes(),clientSocket);
             System.out.println(new ControlPacket(readData(clientSocket.getInputStream())).getDestination());

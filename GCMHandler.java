@@ -113,11 +113,18 @@ public class GCMHandler{
     }
 
     public JSONObject createJson(int callerId,String token){
+        return createJson(callerId, token, false);
+    }
+    public JSONObject createJson(int callerId,String token, boolean isVideo){
         JSONObject JsonPost = new JSONObject();
         JSONObject payload = new JSONObject();
         try {
             payload.put("TYPE","call");
             payload.put("CALLER",callerId);
+            if(isVideo)
+                payload.put("isVideo",true);
+            else
+                payload.put("isVideo",false);
             JsonPost.put("data", payload);
             JsonPost.put("to", token);
         } catch (JSONException e) {
