@@ -73,6 +73,7 @@ class TCPClient
             //for (ControlFlag flag : ControlFlag.values())
             //    flags.setFlag(flag, true);
             flags.setFlag(ControlFlag.INITVID, true);
+            flags.setFlag(ControlFlag.INITCALL, true);
             ctrl.setFlags(flags);
 
             for (ControlFlag flag : ControlFlag.values()){

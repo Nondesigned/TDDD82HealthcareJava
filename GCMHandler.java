@@ -121,6 +121,7 @@ public class GCMHandler{
             payload.put("isVideo",isVideo);
             JsonPost.put("data", payload);
             JsonPost.put("to", token);
+            System.out.println(JsonPost.toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
