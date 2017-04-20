@@ -118,7 +118,7 @@ public class GCMHandler{
         try {
             payload.put("TYPE","call");
             payload.put("CALLER",callerId);
-            payload.put("isVideo",isVideo.toString());
+            payload.put("isVideo",Boolean.toString(isVideo));
             JsonPost.put("data", payload);
             JsonPost.put("to", token);
             System.out.println(JsonPost.toString());
