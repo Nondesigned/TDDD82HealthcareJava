@@ -40,10 +40,10 @@ public class GCMHandler{
     /**
      * Send GCM
      */
-    public void startCall (int callerID, int userID) throws IOException{
+    public void startCall (int callerID, int userID, boolean isVideo) throws IOException{
         String token = getToken(userID);    
 
-        sendPost(callerID,token);
+        sendPost(callerID,token,isVideo);
     }
 
     public void setToken(int userId,String token) {
@@ -86,7 +86,7 @@ public class GCMHandler{
     }
 
 //Skickar HTTP Post till GCM som skickar vidare en pushnotis till klient. JSon data
-    public void sendPost(int callerId,String token) throws IOException {
+    public void sendPost(int callerId,String token, boolean isVideo) throws IOException {
         String authKey = "AIzaSyAfOZbxa1N5C5G8Y7xnYLdwZ8l7HCEENiE";
         String site = "https://fcm.googleapis.com/fcm/send";
         
@@ -98,7 +98,7 @@ public class GCMHandler{
         con.setRequestProperty("Authorization" ,"key="+" "+authKey);
 
         DataOutputStream dos = new DataOutputStream(con.getOutputStream());
-        dos.writeBytes(createJson(callerId,token).toString());
+        dos.writeBytes(createJson(callerId,token, isVideo).toString());
         dos.flush();
         dos.close();
 
@@ -112,9 +112,6 @@ public class GCMHandler{
         in.close();
     }
 
-    public JSONObject createJson(int callerId,String token){
-        return createJson(callerId, token, false);
-    }
     public JSONObject createJson(int callerId,String token, boolean isVideo){
         JSONObject JsonPost = new JSONObject();
         JSONObject payload = new JSONObject();
