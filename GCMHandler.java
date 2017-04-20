@@ -118,10 +118,7 @@ public class GCMHandler{
         try {
             payload.put("TYPE","call");
             payload.put("CALLER",callerId);
-            if(isVideo)
-                payload.put("isVideo",true);
-            else
-                payload.put("isVideo",false);
+            payload.put("isVideo",isVideo);
             JsonPost.put("data", payload);
             JsonPost.put("to", token);
         } catch (JSONException e) {
